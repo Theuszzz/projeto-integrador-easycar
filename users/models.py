@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 class PerfilCliente(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -12,9 +13,10 @@ class PerfilCliente(models.Model):
     
     # função para retornar histórico
     def get_historico_alugueis(self):
-        return
+        # Por existir related_name='alugueis', não precisa importar Aluguel aqui
+        return self.alugueis.all()
     
     # função para retornar alugueis ativos
     def get_alugueis_ativos(self):
-        return
-    
+        hoje = timezone.now().date()
+        return self.alugueis.filter(data_fim__gte=hoje)

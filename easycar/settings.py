@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'users',
     'cars',
     'rentals',
+    'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [

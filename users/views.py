@@ -10,7 +10,7 @@ class PerfilClienteViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = PerfilClienteSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
+    def get_queryset(self):                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
         # pega o usuário logado
         user = self.request.user
 

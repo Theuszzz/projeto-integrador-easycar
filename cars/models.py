@@ -11,5 +11,13 @@ class Carro(models.Model):
     ]
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='disponivel')
 
+    def marcar_como_alugado(self):
+        self.status = 'alugado'
+        self.save()
+
+    def marcar_como_disponivel(self):
+        self.status = 'disponivel'
+        self.save()
+
     def __str__(self):
         return f"{self.modelo} ({self.placa})"

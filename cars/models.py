@@ -11,5 +11,12 @@ class Carro(models.Model):
     ]
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='disponivel')
 
+    def alterar_status(self, novo_status):
+        if novo_status in dict(self.STATUS_CHOICES):
+            self.status = novo_status
+            self.save()
+        else:
+            raise ValueError("Status inválido")
+
     def __str__(self):
         return f"{self.modelo} ({self.placa})"

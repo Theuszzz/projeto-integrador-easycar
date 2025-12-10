@@ -5,13 +5,14 @@ from rest_framework.response import Response
 from .models import Carro
 from .serializers import CarroSerializer
 
+from users.permissions import IsFuncionarioOuSuperuser
+from rest_framework.permissions import IsAuthenticated
+
 
 class CarroViewSet(viewsets.ModelViewSet):
     serializer_class = CarroSerializer
     queryset = Carro.objects.all()
-
-    # Bloqueia todos os métodos de escrita (POST, PUT, PATCH, DELETE)
-    http_method_names = ['get', 'head', 'options']
+    permission_classes = [IsAuthenticated, IsFuncionarioOuSuperuser]
 
     # Rota personalizada: /api/carros/disponiveis/
     @action(detail=False, methods=['get'], url_path='disponiveis')

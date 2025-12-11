@@ -6,6 +6,8 @@ from .serializers import PerfilClienteSerializer
 from .serializers import UserSerializer
 from users.permissions import IsFuncionarioOuSuperuser
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from rentals.models import Aluguel
 # Temporário
@@ -24,7 +26,7 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsFuncionarioOuSuperuser]
 
 # classe para visualizar os perfis dos clientes
-class PerfilClienteViewSet(viewsets.ReadOnlyModelViewSet):
+class PerfilClienteViewSet(viewsets.ModelViewSet):
     # usa o serializador de perfil de cliente
     serializer_class = PerfilClienteSerializer
     permission_classes = [permissions.IsAuthenticated, IsFuncionarioOuSuperuser]
@@ -38,6 +40,14 @@ class PerfilClienteViewSet(viewsets.ReadOnlyModelViewSet):
         return PerfilCliente.objects.select_related('user').all()
         
         # return []
+    
+    # rota api/perfis-clientes/{id}/alugueis
+    @action(detail=True, methods=['get'])
+    def alugueis(self, request, pk=None):
+        perfil_cliente = self.get_object()
+        alugueis = perfil_cliente.get_historico_alugueis()
+        serializer = AluguelSerializerTeste(alugueis, many=True)
+        return Response(serializer.data)
     
 class MeusAlugueisView(viewsets.ReadOnlyModelViewSet):
     # usa o serializador de perfil de cliente

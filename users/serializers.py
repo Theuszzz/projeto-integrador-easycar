@@ -29,6 +29,13 @@ class UserSerializer(serializers.ModelSerializer):
 class PerfilClienteSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
 
+    user_id = serializers.PrimaryKeyRelatedField(
+        # querysetFilter=User.objects.filter(groups__name='Clientes'),
+        queryset=User.objects.all(),
+        source='user',
+        write_only=True
+    )
+
     class Meta:
         model = PerfilCliente
-        fields = ['id', 'user', 'cnh', 'telefone', 'endereco']
+        fields = ['id', 'user', 'user_id', 'cnh', 'telefone', 'endereco']

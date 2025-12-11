@@ -13,6 +13,13 @@ from decimal import Decimal
 class AlugarCarro(generics.ListCreateAPIView):
     queryset = Aluguel.objects.all()
     serializer_class = AluguelSerializer
+
+class AtualizarAluguel(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Aluguel.objects.all()
+    serializer_class = AluguelSerializer
+
+
+
     
         
         

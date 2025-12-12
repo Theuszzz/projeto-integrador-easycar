@@ -1,6 +1,6 @@
 .venv/
 venv/
-
+easyCarProject/
 db.sqlite3
 
 __pycache__/
@@ -10,3 +10,4 @@ media/
 
 .vscode/
 .idea/
+teste.py

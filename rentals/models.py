@@ -20,5 +20,16 @@ class Aluguel(models.Model):
     ]
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='ativo')
 
+    def save(self, *args, **kwargs):
+        # Só calcula se datas e carro existirem
+        if self.data_inicio and self.data_fim and self.carro:
+            dias = (self.data_fim - self.data_inicio).days
+            if dias <= 0:
+                dias = 1
+            
+            self.valor_total = dias * self.carro.valor_diaria
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"Aluguel {self.id} - {self.carro.modelo}"

@@ -2,26 +2,22 @@ from rest_framework import serializers
 from .models import Aluguel
 
 class AluguelSerializer(serializers.ModelSerializer):
+    valor_total = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
     class Meta:
         model = Aluguel
-        fields = ['id', 'carro', 'funcionario', 'data_inicio', 'data_fim','valor_total','status']
+        fields = ['id', 'perfil_cliente', 'carro', 'funcionario', 'data_inicio', 'data_fim','status', 'valor_total']
 
     
-    def perform_create(self, validated_data):
-        aluguel = validated_data
+    def validate(self, aluguel):
+        data_inicio = aluguel["data_inicio"]
+        data_fim = aluguel["data_fim"]
 
-        data_inicio = validated_data['data_inicio']
-        data_fim = validated_data['data_fim']
-        carro = validated_data['carro']
+        if data_inicio and data_fim:
+            if data_fim < data_inicio:
+                raise serializers.ValidationError({
+                    "data_fim": "A data de fim não pode ser menor que a data de início."
+                })
 
-        # Calcula dias alugados
-        dias = (data_fim - data_inicio).days
-        
-        if dias <= 0:
-            dias = 1  # garante pelo menos 1 dia
+        return aluguel
 
-        # Calcula valor total
-        valor_total = dias * carro.valor_diaria
 
-        # Salva já com o valor calculado
-        serializer.save(valor_total=valor_total)

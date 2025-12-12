@@ -5,22 +5,16 @@ from rest_framework import routers
 from users.views import PerfilClienteViewSet, MeusAlugueisView
 from users.views import UserViewSet
 from cars.views import CarroViewSet
-<<<<<<< HEAD
 from rentals.views import AlugarViewSet
-=======
 from django.views.generic import RedirectView
->>>>>>> origin/main
 
 
 router = routers.DefaultRouter()
 router.register(r'carros', CarroViewSet, basename='carro')
 router.register(r'users', UserViewSet, basename='user')
-<<<<<<< HEAD
 router.register(r'clientes', PerfilClienteViewSet, basename='cliente')
-router.register(r'alugueis', AlugarViewSet, basename='aluguel')
-=======
+router.register(r'aluguel', AlugarViewSet, basename='aluguel')
 router.register(r'perfis-clientes', PerfilClienteViewSet, basename='perfil-cliente')
->>>>>>> origin/main
 
 urlpatterns = [
     path('', RedirectView.as_view(url='api/', permanent=False)),

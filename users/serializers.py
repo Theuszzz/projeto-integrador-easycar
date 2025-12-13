@@ -5,16 +5,28 @@ from .models import PerfilCliente
 #------------------------------------------------------------------------------
 
 class UserSerializer(serializers.ModelSerializer):
-    senha = serializers.CharField(write_only=True)
-    primeiro_nome = serializers.CharField(source='first_name', required=True)  # mapeia first_name, campo obrigatorio
+    senha = serializers.CharField(write_only=True, required=False)
+    primeiro_nome = serializers.CharField(source='first_name', required=False)  # mapeia first_name
     is_staff = serializers.BooleanField(default=False, read_only=True)
     is_superuser = serializers.BooleanField(default=False, read_only=True)
     grupo = serializers.SerializerMethodField() 
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'primeiro_nome' , 'is_staff' , 'senha', 'is_active' , 'is_superuser' , 'grupo']
+        fields = ['id', 'username', 'email', 'primeiro_nome' , 'senha', 'is_active',  'is_staff'  , 
+                  'is_superuser' , 'grupo']
 
+
+    def get_fields(self):
+        fields = super().get_fields()
+        
+        # Se for criação (POST), torna obrigatório
+        if self.context.get('request') and self.context['request'].method == 'POST':
+            fields['senha'].required = True
+            fields['primeiro_nome'].required = True
+        
+        return fields
+    
     def get_grupo(self, obj):
         # retorna apenas o primeiro grupo do usuario (ou None se nao tiver grupo)
         grupos = obj.groups.all()
@@ -48,6 +60,7 @@ class UserSerializer(serializers.ModelSerializer):
         nova_senha = validated_data.get('senha', None)
         if nova_senha:
             instance.set_password(nova_senha)
+            
         # chama o update da api para atualizar os outros campos normalmente
         return super().update(instance, validated_data)       
       

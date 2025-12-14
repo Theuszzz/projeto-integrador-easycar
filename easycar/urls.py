@@ -8,7 +8,7 @@ from users.views import UserViewSet
 from cars.views import CarroViewSet
 from django.views.generic import RedirectView
 from rentals.views import AlugarViewSet
-
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 router = routers.DefaultRouter()
 router.register(r'carros', CarroViewSet, basename='carro')
@@ -24,4 +24,8 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('api/auth/token/', obtain_auth_token, name='api_token_auth'),
     path('api/me/alugueis/', MeusAlugueisView.as_view({'get': 'list'}), name='meus-alugueis'),
+
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/docs/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]

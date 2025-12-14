@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rentals',
     'rest_framework',
     'rest_framework.authtoken',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -130,4 +131,5 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DATE_INPUT_FORMATS': ['%d/%m/%Y', '%Y-%m-%d'],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }

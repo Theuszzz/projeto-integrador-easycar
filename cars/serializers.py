@@ -4,7 +4,7 @@ from .models import Carro
 class CarroSerializer(serializers.ModelSerializer):
     class Meta:
         model = Carro
-        fields = ['modelo', 'placa', 'ano', 'valor_diaria', 'status']
+        fields = ['id','modelo', 'placa', 'ano', 'valor_diaria', 'status']
         read_only_fields = ['status']  # impede alterar direto
 
 class AlterarStatusSerializer(serializers.Serializer):

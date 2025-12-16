@@ -13,7 +13,7 @@ class AlugarViewSet(viewsets.ModelViewSet):
     filterset_class = AluguelFilter #define quais campos podem ser filtrados
 
 
- 
+
     
        
 

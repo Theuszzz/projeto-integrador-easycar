@@ -1,31 +1,28 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
-
 from .models import Carro
 from .serializers import CarroSerializer
-
-from users.permissions import IsFuncionarioOuSuperuser
-from rest_framework.permissions import IsAuthenticated
-
+from users.permissions import IsClienteReadOnlyOrFuncionario  # ✅ Nova permissão
 
 class CarroViewSet(viewsets.ModelViewSet):
     queryset = Carro.objects.all()
-    permission_classes = [IsAuthenticated, IsFuncionarioOuSuperuser]
     serializer_class = CarroSerializer
     lookup_field = 'placa'
     
-    # Rota: /api/carros/disponiveis/
-    @action(detail=False, methods=['get'],permission_classes=[IsAuthenticated])
+    # ✅ Define a permissão global correta
+    permission_classes = [IsClienteReadOnlyOrFuncionario]
+
+    # As actions personalizadas já herdam permission_classes do ViewSet,
+    # então NÃO é necessário repetir permission_classes=[IsAuthenticated] nelas.
+    @action(detail=False, methods=['get'])
     def disponiveis(self, request):
         carros = self.queryset.filter(status='disponivel')
         serializer = self.get_serializer(carros, many=True)
         return Response(serializer.data)
 
-    # Rota: /api/carros/alugados/
-    @action(detail=False, methods=['get'],permission_classes=[IsAuthenticated])
+    @action(detail=False, methods=['get'])
     def alugados(self, request):
         carros = self.queryset.filter(status='alugado')
         serializer = self.get_serializer(carros, many=True)
         return Response(serializer.data)
-
